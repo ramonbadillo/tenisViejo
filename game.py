@@ -37,34 +37,35 @@ class game:
     
     
     def getWinner(self):
-        self.diff = math.fabs(self.scoreP1 - self.scoreP2)
         
         if self.scoreP1 >=3 and self.scoreP2 >=3:
-            self.cuatros = True
-        
+			self.cuatros = True
+			self.diff = math.fabs(self.scoreP1 - self.scoreP2)		
+            
+			if self.diff==0:
+				print "Douce"
+				
+			if self.diff==1:
+				print "Adv"
+				
+			if self.diff > 1:
+				self.getAdvantage()
+				
+		else :
+			if self.scoreP1 >3 or self.scoreP2 >3:
+				self.getAdvantage()
           
-        if self.scoreP1 >3 or self.scoreP2 >3 and not self.cuatros:
-            self.getAdvantage()
+        
             
-        if self.diff > 1 and self.cuatros:
-            self.getAdvantage()
-         
-        '''   
-        if self.cuatros and self.diff==0:
-            print "Douce"
-            
-        if self.cuatros and self.diff==1:
-            print "Adv"
-        '''
+        
         
     def showResults(self):
         print self.cuatros
-        if not self.cuatros:
+		if self.ganador != "":
+            print "Win"
+        elif not self.cuatros:
             print("%s,%s" % (self.description[self.scoreP1], self.description[self.scoreP2]))
-        else:
-            print("%s,%s" % (self.scoreP1, self.scoreP2))
-        if self.ganador != "":
-            print("Felicidades gano: %s" % (self.ganador))
+        
     
     def getAdvantage(self):
         if self.scoreP1 > self.scoreP2:
