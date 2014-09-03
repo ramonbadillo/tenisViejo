@@ -1,4 +1,4 @@
-'''
+"""
 Al inicio del juego cómo debe de estar el score?
 >>> Game().score()
 [0, 0]
@@ -13,104 +13,78 @@ Cuando un jugador anota 3 veces seguidas
 
 Cuando un jugador anota 4 veces seguidas
 >>> Game().scores(1).scores(1).scores(1).scores(1).score()
-[Wins, Loses]
+['Win', 'Lose']
 
 Cuando el otro jugador le empata
 >>> Game().scores(1).scores(1).scores(1).scores(2).scores(2).scores(2).score()
-[Deuce, Deuce]
+['Deuce', 'Deuce']
 
 Cuando estan empatados y uno obtiene la ventaja
 >>> Game().scores(1).scores(1).scores(1).scores(2).scores(2).scores(2).scores(1).score()
-[Adv, ]
+['Adv', 'Deuce']
 
 Cuando después de tener la ventaja vuelven a empatar
 >>> Game().scores(1).scores(1).scores(1).scores(2).scores(2).scores(2).scores(1).scores(2).score()
-[Deuce', Deuce]
+['Deuce', 'Deuce']
 
 Cuando obtiene la ventaja y además anota otro punto
 >>> Game().scores(1).scores(1).scores(1).scores(2).scores(2).scores(2).scores(1).scores(1).score()
-[Wins, Loses]
-'''
+['Win', 'Lose']
+"""
 
 import math
 
 class Game:
     
+    description = [0,15,30,40,'Deuce','Adv','Win','Lose']
+    puntos = [0,0]
     
-    description = ['0','15','30','40','Adv']
-    pScores = [0,0]
-    pScoresF = ["",""]
-    flag = False
-    win = False
-    diff =  0
-    empates = False
-    
-    def __init__(self):pass
-        
+    def __init__(self):
+        self.puntos[0] = 0
+        self.puntos[1] = 0   
         
     def scores(self, player):
-        if not self.win:
+        if player <=2 and player > 0:
             player -=1
-            self.pScores[player] += 1
+            self.puntos[player] += 1
         else:
-            print("Se acabo el set")
-    
-           
-           
-           
-            
-    def score(self):
-        self.diff = math.fabs(self.pScores[0] - self.pScores[1])
-        if self.pScores[0] >= 3 and self.pScores[1] >= 3:
-            self.flag = True
-        elif self.pScores[0] > 3 or self.pScores[1] > 3 and not self.flag:
-            self.getWinner()
-            self.flag = True
-        if self.flag:
-            if self.diff > 1:
-                self.getWinner()
-            elif self.diff == 0:
-                self.pScoresF[0] = 'Deuce'
-                self.pScoresF[1] = 'Deuce'
-            else:
-                self.getAdv()
-        self.showResults()
-        
+            print("Jugador no valido")
+        self.check()
         return self
-        
-       
-        if self.diff > 1 and self.cuatros:
-            self.getAdvantage()
-        
-        
-    def showResults(self):
-        if not self.flag:
-            print("[%s, %s]" % (self.description[self.pScores[0]], self.description[self.pScores[1]]))
-        else:
-            print("[%s, %s]" % (self.pScoresF[0], self.pScoresF[1]))
-    
-    def getAdv(self):
-        if self.pScores[0] > self.pScores[1]:
-            self.pScoresF[0] = 'Adv'
-            self.pScoresF[1] = ''
-        if self.pScores[0] < self.pScores[1]:
-            self.pScoresF[1] = ''
-            self.pScoresF[0] = 'Adv'
+                  
             
-    def getWinner(self):
-        if self.pScores[0] > self.pScores[1]:
-            self.pScoresF[0] = 'Wins'
-            self.pScoresF[1] = 'Loses'
-        if self.pScores[0] < self.pScores[1]:
-            self.pScoresF[1] = 'Wins'
-            self.pScoresF[0] = 'Loses'
-        self.win = True
+    def check(self):
+        if self.puntos[0]>6:
+            self.puntos[0]-=1
+
+        if self.puntos[1]>6:
+            self.puntos[1]-=1
+
+        if  self.puntos[0]>3 and self.puntos[1]<3:
+            self.puntos[0] = 6
+
+        if  self.puntos[0]<3 and self.puntos[1]>3:
+            self.puntos[1] = 6
+
+        if self.description[self.puntos[0]] == 40 and self.description[self.puntos[1]] == 40:
+            self.puntos[0]+=1
+            self.puntos[1]+=1
+
+        if self.description[self.puntos[0]] == 'Adv' and self.description[self.puntos[1]] == 'Adv':
+            self.puntos[0]-=1
+            self.puntos[1]-=1
+
+        if self.description[self.puntos[0]] == 'Win':
+            self.puntos[1] =7
+
+        if self.description[self.puntos[1]] == 'Win':
+            self.puntos[0] =7
+
+        return self       
         
-
-
+    def score(self):
+        return [self.description[self.puntos[0]], self.description[self.puntos[1]]]
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-    
